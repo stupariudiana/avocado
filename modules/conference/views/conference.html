@@ -1,0 +1,69 @@
+<div ng-app="Conference" ng-controller="ConferenceController">
+
+    <h2>Conference name: {{conferenceName}}</h2>
+    <h3>Abstract Deadline: {{abstractDeadline | date : "dd.MM.y"}}</h3>
+    <h3>Paper Deadline: {{proposalDeadline | date : "dd.MM.y"}}</h3>
+
+    <div ng-if="userType==='author'">
+        <form name="form" ng-submit="onSubmitProposal()" role="form">
+            <input type="text" name="paperName" id="paperName" class="form-control" ng-model="paperName" required/>
+            <input type="text" name="paperKeyWords" id="paperKeyWords" class="form-control" ng-model="paperKeyWords"
+                   required/>
+            <input type="text" name="paperText" id="paperText" class="form-control" ng-model="paperText" required/>
+            <input type="file" name="paperFinalPaper" id="paperFinalPaper" class="form-control"
+                   ng-model="paperFinalPaper"/>
+            <input type="text" name="paperType" id="paperType" class="form-control" ng-model="paperType" required/>
+            <button ng-click="onSubmitProposal(paperName, paperKeyWords, paperText, paperFinalPaper, paperType)" class="btn btn-info">Submit
+                proposal
+            </button>
+
+        </form>
+    </div>
+    <div ng-if="userType==='comitet'">
+
+        <button ng-click="getAvailableProposals()" ng-if="!proposals.length">See conference proposals</button>
+        <ul ng-repeat="proposal in proposals" class="list-group">
+            <li class="list-group-item list-group-item-light">{{proposal.name}}</li>
+            <li class="list-group-item list-group-item-light">{{proposal.text}}</li>
+            <li class="list-group-item list-group-item-light">{{proposal.keywords}}</li>
+            <li class="list-group-item list-group-item-light">{{proposal.user.firstName}}</li>
+            <li class="list-group-item list-group-item-light">{{proposal.user.lastName}}</li>
+            <li class="list-group-item list-group-item-light">{{proposal.user.affiliation}}</li>
+            <div class="btn-group" role="group">
+                <button ng-if="!clicked[proposal.id]" ng-click="setBid(0,proposal.id)" class="btn btn-info">No</button>
+                <button ng-if="!clicked[proposal.id]" ng-click="setBid(1,proposal.id)" class="btn btn-info">Maybe</button>
+                <button ng-if="!clicked[proposal.id]" ng-click="setBid(2,proposal.id)" class="btn btn-info">Yes</button>
+            </div>
+            <br>
+        </ul>
+    </div>
+    <div ng-if="userType==='chair'">
+
+        <button ng-click="getAvailableProposals()" ng-if="!proposals.length" class="btn btn-info">See conference proposals</button>
+        <ul ng-repeat="proposal in proposals" class="list-group">
+            <li class="list-group-item list-group-item-light">{{proposal.name}}</li>
+            <li class="list-group-item list-group-item-light">{{proposal.text}}</li>
+            <li class="list-group-item list-group-item-light">{{proposal.keywords}}</li>
+            <li class="list-group-item list-group-item-light">{{proposal.user.firstName}}</li>
+            <li class="list-group-item list-group-item-light">{{proposal.user.lastName}}</li>
+            <li class="list-group-item list-group-item-light">{{proposal.user.affiliation}}</li>
+            <button ng-click="getBidersWithYes(proposal)" class="btn btn-info">Show biders voted Yes.</button>
+                <ul ng-repeat="u in proposal.yesProposals" class="list-group">
+                    <li class="list-group-item list-group-item-light">{{u.id}}</li>
+                    <li class="list-group-item list-group-item-light">{{u.firstName}}</li>
+                    <li class="list-group-item list-group-item-light">{{u.lastName}}</li>
+                    <button ng-click="AssignToThis()" class="btn btn-info">Assign to this user.</button>
+                    <br>
+                </ul>
+            <button ng-click="getBidersWithMaybe(proposal)" class="btn btn-info">Show biders voted Maybe.</button>
+                <ul ng-repeat="u in proposal.maybeProposals" class="list-group">
+                    <li class="list-group-item list-group-item-light">{{u.id}}</li>
+                    <li class="list-group-item list-group-item-light">{{u.firstName}}</li>
+                    <li class="list-group-item list-group-item-light">{{u.lastName}}</li>
+                    <button ng-click="AssignToThis()" class="btn btn-info">Assign to this user.</button>
+                    <br>
+                </ul>
+            <br>
+        </ul>
+    </div>
+</div>

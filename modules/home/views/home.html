@@ -1,0 +1,18 @@
+<div ng-app="Home" ng-controller="HomeController">
+    <h1>Welcome {{firstName}}</h1>
+    <h3>Here are all the available conferences, click to see details</h3>
+
+    <div ng-show="existsConferences">
+        <div ng-repeat="conference in conferences">
+            <button ng-click="seeConference(conference)" class="btn btn-info">{{conference.name}}</button>
+        </div>
+
+
+    </div>
+    <div ng-show="!existsConferences">
+        There are no conferences available!
+    </div>
+    <p><a href="#/login">Logout</a></a></p>
+
+
+</div>
